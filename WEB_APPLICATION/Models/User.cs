@@ -8,6 +8,13 @@ namespace WEB_APPLICATION.Models
         Instructor,
         Student
     }
+    public static string role_toString(Role role ) 
+    {
+        if (role == Role.Admin ) {return "admin" ;}
+        else if (role == Role.Instructor ) {return "instructor" ;}
+        else if (role == Role.Student ) {return "student" ;}
+        return "" // in hte case it is unknown 
+    }
 
     public class User
     {
