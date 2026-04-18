@@ -5,8 +5,7 @@ using System.Web;
 
 namespace WEB_APPLICATION.Models
 {
-    public class User
+    public class UserDAL
     {
-    
     }
 }
