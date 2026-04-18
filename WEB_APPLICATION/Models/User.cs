@@ -5,7 +5,8 @@ using System.Web;
 
 namespace WEB_APPLICATION.Models
 {
-    public class Class1
+    public class User
     {
+        // This is a test to see if it is working or not 
     }
 }
