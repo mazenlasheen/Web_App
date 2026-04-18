@@ -1,14 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace WEB_APPLICATION.Models
 {
+    public enum Role
+    {
+        Admin,
+        Instructor,
+        Student
+    }
+
     public class User
     {
-        // This is a test to see if it is working or not 
-        // Checking another comment if it works 
-        // a7a
+        public int UserID { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public Role Role { get; set; }
+
+        public User(int userID, string username, string password, Role role)
+        {
+            UserID = userID;
+            Username = username;
+            Password = password;
+            Role = role;
+        }
     }
 }
