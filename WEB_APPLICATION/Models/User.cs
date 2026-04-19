@@ -1,5 +1,5 @@
 ﻿using System;
-
+using BCrypt.Net; 
 namespace WEB_APPLICATION.Models
 {
     public enum Role
