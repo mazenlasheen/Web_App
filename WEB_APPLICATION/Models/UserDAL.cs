@@ -8,12 +8,10 @@ using System.Data.SqlClient ;
 namespace WEB_APPLICATION.Models
 {
     public class UserDAL // DAL basically stands for Data Access Layer 
-    {  
-         
-        // THE METHOD BELOW RETURNS FALSE IF THE USERNAME ALREADY EXISTS 
+    {   // THE METHOD BELOW RETURNS FALSE IF THE USERNAME ALREADY EXISTS 
+       
         public static  bool registerUser(string username , string password , Role role , string firstName , string lastName )  
         {
-            
             
              try {
                 string conn_string = ConfigurationManager.ConnectionStrings["LearningPlatformDB"].ConnectionString;
@@ -33,11 +31,11 @@ namespace WEB_APPLICATION.Models
                 conn.Close() ; 
                 return true ; 
              } catch (SqlException e ) {return false ; } 
-
+        }
+        public static bool loginAuthentication (string username , string password ) 
+        {   //  Authentication part of the login
+                
 
         }
-
-    
-}
-
+    }
 }
