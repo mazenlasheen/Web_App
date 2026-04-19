@@ -33,46 +33,44 @@ namespace WEB_APPLICATION.Models
                 return true ; 
              } catch (SqlException e ) {return false ; } 
         }
-        public static int  loginAuthentication (string username , string password ) 
-        {   //  Authentication part of the login
-                    // creting the connection string 
-            bool first_stage = false ; 
-            bool second_stage = false ; 
-            string connectionString = ConfigurationManager.ConnectionStrings["LearningPlatformDataBase"].ConnectionString ; 
-
-            // Creating the connection and the sql command 
-            SqlConnection conn = new SqlConnection(connectionString) ; 
-             try 
-            {         
-                SqlCommand cmd = new SqlCommand("SELECT userName , [password]  FROM [User] WHERE userName = @userName" , conn ) ;
-                conn.Open() ; 
-                SqlDataReader reader = cmd.ExecuteReader() ;           
-                string userReturned = " "; 
-                string passwordReturned = "" ; 
-                while (reader.Read()) 
+        public static int LoginAuthentication(string userName, string password)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["LearningPlatformDB"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString);
+            try
             {
-                userReturned = UtilityDAL.returnString(reader,"userName");
-                passwordReturned = UtilityDAL.returnString(reader,"password");
-                bool correctPassword  = BCrypt.Net.BCrypt.Verify(password , passwordReturned ) ;
-                if ( userReturned !=  null  ) {first_stage = true ; } // meaning we found the userName 
-                if (  passwordReturned != null   && ( correctPassword) ) {second_stage = true ;} // meaning the pass word is also correct 
+                SqlCommand cmd = new SqlCommand("SELECT [password] FROM [User] WHERE userName = @userName", conn);
+                cmd.Parameters.AddWithValue("@userName", userName);
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (!reader.Read()) { return 2; } // username not found
+
+                string passwordReturned = reader["password"].ToString();
+                bool correctPassword = BCrypt.Net.BCrypt.Verify(password, passwordReturned);
+
+                if (!correctPassword) { return 1; } // wrong password
+                return 0; // success
             }
-            
-            // the 4 conditions that might occur 
-            if ( (first_stage == true )  &&  (second_stage == true )  )  {return 0 ; }  // successful authentication 
-            else if (first_stage == true && (second_stage == false )) {return 1 ;}  // correct username wrong passwprd
-            else if (first_stage == false  ) {return 2 ;} // wrong username - not found 
-            else {return -1 ; }
-            } 
-            catch (SqlException e ) 
-                { 
-                    return -1 ; 
-                }
-            finally 
+            catch (SqlException e)
             {
-                conn.Close()  ; 
-            } // to ensure that even if an issue occured the connection is closed 
+                return -1;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+        public static User getUserById ( int userId ) 
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["LearningPlatformDataBase"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString );  
+            try 
+            {
+                SqlCommand cmd = new SqlCommand ("SELECT * FROM [User] WHERE userId = @userId ")
 
+            }
+            catch (SqlException e ) {return -1 ; }
         }
     }
 }
