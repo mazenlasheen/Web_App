@@ -1,0 +1,5 @@
+The Case for the loginAuthentication Method in UserDAL.cs 
+0 - Success (username + password correct)
+1 - Username found, password wrong
+2 - Username not found
+-1 - for unexpected errors 
