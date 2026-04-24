@@ -30,12 +30,12 @@ public class UtilityDAL
         DateTime  value = reader.IsDBNull(index_r) ? DateTime.MinValue : reader.GetDateTime(index_r) ;
         return value ; 
     }
-    public static Role ParseRole(string role)
+    public static User.Role ParseRole(string role)
     {
-        if (role == "Student") return Role.Student;
-        if (role == "Instructor") return Role.Instructor;
+        if (role == "Student") return User.Role.Student;
+        if (role == "Instructor") return User.Role.Instructor;
         if (role == "Admin") return Role.Admin;
-        return Role.Student; // default fallback
+        return User.Role.Student; // default fallback
     }
     public static SqlConnection createConnection () 
     {

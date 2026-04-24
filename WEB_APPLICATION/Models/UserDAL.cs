@@ -13,7 +13,7 @@ namespace WEB_APPLICATION.Models
     public class UserDAL // DAL basically stands for Data Access Layer 
     {   // THE METHOD BELOW RETURNS FALSE IF THE USERNAME ALREADY EXISTS 
        
-        public static  bool registerUser(string username , string password , Role role , string firstName , string lastName )  
+        public static  bool registerUser(string username , string password , User.Role role , string firstName , string lastName )  
         {
             SqlConnection  conn = UtilityDAL.createConnection() ; 
              try {
@@ -77,7 +77,7 @@ namespace WEB_APPLICATION.Models
                 int id = UtilityDAL.returnInt(reader, "userId" ) ; 
                 string userName = UtilityDAL.returnString(reader,"userName") ;
                 string  password = UtilityDAL.returnString(reader,"password") ; 
-                User.role role  = UtilityDAL.parseRole(UtilityDAL.returnString(reader,"role")) ;
+                User.Role role  = UtilityDAL.parseRole(UtilityDAL.returnString(reader,"role")) ;
                 string firstName = UtilityDAL.returnString(reader,"firstName") ;
                 string lastName =  UtilityDAL.returnString(reader,"lastName") ;
                 DateTime datetime = UtilityDAL.returnDateTime(reader,"accountCreationDate");
@@ -107,7 +107,7 @@ namespace WEB_APPLICATION.Models
                     int id = UtilityDAL.returnInt(reader, "userId" ) ; 
                     string userName = UtilityDAL.returnString(reader,"userName") ;
                     string  password = UtilityDAL.returnString(reader,"password") ; 
-                    User.role role  = UtilityDAL.parseRole(UtilityDAL.returnString(reader,"role")) ;
+                    User.Role role  = UtilityDAL.parseRole(UtilityDAL.returnString(reader,"role")) ;
                     string firstName = UtilityDAL.returnString(reader,"firstName") ;
                     string lastName =  UtilityDAL.returnString(reader,"lastName") ;
                     DateTime datetime = UtilityDAL.returnDateTime(reader,"accountCreationDate");

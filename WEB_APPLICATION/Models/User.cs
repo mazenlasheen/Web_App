@@ -2,19 +2,8 @@
 using BCrypt.Net; 
 namespace WEB_APPLICATION.Models
 {
-    public enum Role
-    {
-        Admin,
-        Instructor,
-        Student
-    }
-    public static string role_toString(Role role ) 
-    {
-        if (role == Role.Admin ) {return "admin" ;}
-        else if (role == Role.Instructor ) {return "instructor" ;}
-        else if (role == Role.Student ) {return "student" ;}
-        return "" // in hte case it is unknown 
-    }
+
+
 
     public class User
     {
@@ -25,7 +14,12 @@ namespace WEB_APPLICATION.Models
         public  string firstName {get ; set; }
         public  string lastName {get; set; }
         public DateTime accountCreationDate {get; set ; } // interesting short cut 
-
+        public enum Role
+        {
+            Admin,
+            Instructor,
+            Student
+        }
 // Constructor for reading from DB (userId already exists)
     public User(int userId, string userName, string password, Role role, string firstName, string lastName, DateTime accountCreationDate) 
     {
@@ -36,6 +30,13 @@ namespace WEB_APPLICATION.Models
         this.firstName = firstName ; 
         this.lastName = lastName ; 
         this.accountCreationDate = accountCreationDate ; 
+    }
+    public string role_toString(Role role ) 
+    {
+        if (role == Role.Admin ) {return "admin" ;}
+        else if (role == Role.Instructor ) {return "instructor" ;}
+        else if (role == Role.Student ) {return "student" ;}
+        return "" // in hte case it is unknown 
     }
 
 
