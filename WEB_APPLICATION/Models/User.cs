@@ -32,7 +32,7 @@ namespace WEB_APPLICATION.Models
         this.lastName = lastName ; 
         this.accountCreationDate = accountCreationDate ; 
     }
-    public string role_toString(Role role ) 
+    public static  string roleToString(Role role ) 
     {
         if (role == Role.Admin ) {return "admin" ;}
         else if (role == Role.Instructor ) {return "instructor" ;}
