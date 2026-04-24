@@ -25,7 +25,7 @@ namespace WEB_APPLICATION.Models
                 SqlCommand insert = new SqlCommand("INSERT INTO [User] (userName , [password],role , firstName, lastName , accountCreationDate ) VALUES (@userName , @password, @role , @firstName , @lastName , @accountCreationDate ) ", conn) ;
                 insert.Parameters.AddWithValue("@userName" , username ) ;
                 insert.Parameters.AddWithValue("@password",  hashedPassword ) ;
-                insert.Parameters.AddWithValue("@role", User.role_toString(role)) ;
+                insert.Parameters.AddWithValue("@role", User.roleToString(role)) ;
                 insert.Parameters.AddWithValue("@firstName", firstName ) ;
                 insert.Parameters.AddWithValue("@lastName",  lastName ) ;
                 insert.Parameters.AddWithValue("@accountCreationDate", DateTime.Now) ;
@@ -87,13 +87,13 @@ namespace WEB_APPLICATION.Models
             catch (SqlException e ) {return null ; }
             finally {conn.Close() ;}
         }  
-        public static List<User> getAllUsers(string role)  // this is an Admin only method 
+        public static List<User> getAllUsers(string userRole)  // this is an Admin only method 
         {
-            if (role == null ) {role = "student" ;} // defualt role is student   
+            if (userRole == null ) {userRole = "student" ;} // defualt role is student   
             List<User> specifiedUserList = new List<User>(); 
             SqlConnection conn = UtilityDAL.createConnection() ; 
             SqlCommand cmd = new SqlCommand("SELECT * FROM [User] WHERE role = @wantedRole", conn );
-            cmd.Parameters.AddWithValue("@wantedRole", role ) ;
+            cmd.Parameters.AddWithValue("@wantedRole", userRole  ) ;
          
             
             try 
@@ -107,11 +107,11 @@ namespace WEB_APPLICATION.Models
                     int id = UtilityDAL.returnInt(reader, "userId" ) ; 
                     string userName = UtilityDAL.returnString(reader,"userName") ;
                     string  password = UtilityDAL.returnString(reader,"password") ; 
-                    User.Role role  = UtilityDAL.parseRole(UtilityDAL.returnString(reader,"role")) ;
+                    User.Role readRole  = UtilityDAL.parseRole(UtilityDAL.returnString(reader,"role")) ;
                     string firstName = UtilityDAL.returnString(reader,"firstName") ;
                     string lastName =  UtilityDAL.returnString(reader,"lastName") ;
                     DateTime datetime = UtilityDAL.returnDateTime(reader,"accountCreationDate");
-                    User user = new User(id , userName , password , role , firstName , lastName , datetime );
+                    User user = new User(id , userName , password , readRole , firstName , lastName , datetime );
                     specifiedUserList.Add(user) ;
                 }
                 
