@@ -67,10 +67,24 @@ namespace WEB_APPLICATION.Models
             SqlConnection conn = new SqlConnection(connectionString );  
             try 
             {
-                SqlCommand cmd = new SqlCommand ("SELECT * FROM [User] WHERE userId = @userId ")
-
+                
+                SqlCommand cmd = new SqlCommand ("SELECT * FROM [User] WHERE userId = @userId ",conn) ;
+                cmd.Parameters.AddWithValue("@userId",userId) ; 
+                conn.Open() ; 
+                SqlDataReader reader = cmd.ExecuteReader() ; // basiically reader is used to access values 
+                if (reader.Read() == false ) {return null ; }
+                int id = UtilityDAL.returnInt(reader, "userId" ) ; 
+                string userName = UtilityDAL.returnString(reader,"userName") ;
+                string  password = UtilityDAL.returnString(reader,"password") ; 
+                User.role role  = UtilityDAL.parseRole(UtilityDAL.returnString(reader,"role")) ;
+                string firstName = UtilityDAL.returnString(reader,"firstName") ;
+                string lastName =  UtilityDAL.returnString(reader,"lastName") ;
+                DateTime datetime = UtilityDAL.returnDateTime(reader,"accountCreationDate");
+                User user = new User(id , userName , password , role , firstName , lastName , datetime );
+                return user ; 
             }
-            catch (SqlException e ) {return -1 ; }
-        }
+            catch (SqlException e ) {return null ; }
+            finally {conn.Close() ;}
+        }  
     }
 }
