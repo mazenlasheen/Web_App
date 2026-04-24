@@ -13,7 +13,7 @@ namespace WEB_APPLICATION.Models
     public class UserDAL // DAL basically stands for Data Access Layer 
     {   // THE METHOD BELOW RETURNS FALSE IF THE USERNAME ALREADY EXISTS 
        
-        public static  bool registerUser(string username , string password , User.Role role , string firstName , string lastName )  
+        public static  bool registerUser(string username , string password , User.Role userRole , string firstName , string lastName )  
         {
             SqlConnection  conn = UtilityDAL.createConnection() ; 
              try {
@@ -25,7 +25,7 @@ namespace WEB_APPLICATION.Models
                 SqlCommand insert = new SqlCommand("INSERT INTO [User] (userName , [password],role , firstName, lastName , accountCreationDate ) VALUES (@userName , @password, @role , @firstName , @lastName , @accountCreationDate ) ", conn) ;
                 insert.Parameters.AddWithValue("@userName" , username ) ;
                 insert.Parameters.AddWithValue("@password",  hashedPassword ) ;
-                insert.Parameters.AddWithValue("@role", User.roleToString(role)) ;
+                insert.Parameters.AddWithValue("@userRole", UtilityDAL.roleToString(userRole)) ;
                 insert.Parameters.AddWithValue("@firstName", firstName ) ;
                 insert.Parameters.AddWithValue("@lastName",  lastName ) ;
                 insert.Parameters.AddWithValue("@accountCreationDate", DateTime.Now) ;
