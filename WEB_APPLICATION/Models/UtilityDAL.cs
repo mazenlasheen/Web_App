@@ -30,13 +30,7 @@ public class UtilityDAL
         DateTime  value = reader.IsDBNull(index_r) ? DateTime.MinValue : reader.GetDateTime(index_r) ;
         return value ; 
     }
-    public static User.Role ParseRole(string role)
-    {
-        if (role == "Student") return User.Role.Student;
-        if (role == "Instructor") return User.Role.Instructor;
-        if (role == "Admin") return Role.Admin;
-        return User.Role.Student; // default fallback
-    }
+
     public static SqlConnection createConnection () 
     {
         string connectionString = ConfigurationManager.ConnectionStrings["LearningPlatformDataBase"].ConnectionString ; 
