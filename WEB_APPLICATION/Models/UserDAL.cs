@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Data.SqlClient ;
 using BCrypt.Net; 
 
+
 namespace WEB_APPLICATION.Models
 {
     public class UserDAL // DAL basically stands for Data Access Layer 
@@ -13,11 +14,12 @@ namespace WEB_APPLICATION.Models
        
         public static  bool registerUser(string username , string password , Role role , string firstName , string lastName )  
         {
-            
+            string conn_string = ConfigurationManager.ConnectionStrings["LearningPlatformDataBase"].ConnectionString;
+             SqlConnection conn = new SqlConnection(conn_string) ; 
              try {
-                string conn_string = ConfigurationManager.ConnectionStrings["LearningPlatformDataBase"].ConnectionString;
+                
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password) ;
-                SqlConnection conn = new SqlConnection(conn_string) ; 
+                
                 conn.Open() ; 
                 // we do not check first for the user name cause we alreadyt set the column to be UNIQUE In the data base 
                 SqlCommand insert = new SqlCommand("INSERT INTO [User] (userName , [password],role , firstName, lastName , accountCreationDate ) VALUES (@userName , @password, @role , @firstName , @lastName , @accountCreationDate ) ", conn) ;
@@ -32,10 +34,11 @@ namespace WEB_APPLICATION.Models
                 conn.Close() ; 
                 return true ; 
              } catch (SqlException e ) {return false ; } 
+             finally {conn.Close() ;}
         }
         public static int LoginAuthentication(string userName, string password)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["LearningPlatformDB"].ConnectionString;
+            string connectionString = ConfigurationManager.ConnectionStrings["LearningPlatformDataBase"].ConnectionString;
             SqlConnection conn = new SqlConnection(connectionString);
             try
             {
@@ -86,5 +89,41 @@ namespace WEB_APPLICATION.Models
             catch (SqlException e ) {return null ; }
             finally {conn.Close() ;}
         }  
-    }
+        public static List<User> getAllUsers(string role)  // this is an Admin only method 
+        {
+            if (role == null ) {role = "student" ;} // defualt role is student   
+            List<User> specifiedUserList = new List<User>(); 
+            string connectionString = ConfigurationManager.ConnectionStrings["LearningPlatformDataBase"].ConnectionString ; 
+            SqlConnection conn = new SqlConnection(connectionString )  ; 
+            SqlCommand cmd = new SqlCommand("SELECT * FROM [User] WHERE role = @wantedRole", conn );
+            cmd.Parameters.AddWithValue("@wantedRole", role ) ;
+         
+            
+            try 
+            {
+                conn.Open()  ; 
+                // connection must be open before execution 
+                SqlDataReader reader = cmd.ExecuteReader() ; 
+            
+                while (reader.Read() ) // an automatic check for True and False is like done  
+                {
+                    int id = UtilityDAL.returnInt(reader, "userId" ) ; 
+                    string userName = UtilityDAL.returnString(reader,"userName") ;
+                    string  password = UtilityDAL.returnString(reader,"password") ; 
+                    User.role role  = UtilityDAL.parseRole(UtilityDAL.returnString(reader,"role")) ;
+                    string firstName = UtilityDAL.returnString(reader,"firstName") ;
+                    string lastName =  UtilityDAL.returnString(reader,"lastName") ;
+                    DateTime datetime = UtilityDAL.returnDateTime(reader,"accountCreationDate");
+                    User user = new User(id , userName , password , role , firstName , lastName , datetime );
+                    specifiedUserList.Add(user) ;
+                }
+                
+                return specifiedUserList ; 
+            }
+            catch (SqlException e ) {return null ; }
+            finally {conn.Close() ;}
+        }  
+
+        }
+    
 }
