@@ -45,7 +45,7 @@ public class UtilityDAL
         if (role == "Admin") return Role.Admin;
         return User.Role.Student; // default fallback
     }
-        public static  string roleToString(Role role ) 
+        public static  string roleToString(User.Role role ) 
     {
         if (role == Role.Admin ) {return "admin" ;}
         else if (role == Role.Instructor ) {return "instructor" ;}
