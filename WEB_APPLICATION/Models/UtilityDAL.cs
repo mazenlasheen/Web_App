@@ -36,5 +36,11 @@ public class UtilityDAL
         if (role == "Admin") return Role.Admin;
         return Role.Student; // default fallback
     }
+    public static SqlConnection creatConnection () 
+    {
+        string connectionString = ConfigurationManager.ConnectionStrings["LearningPlatformDataBase"].ConnectionString ; 
+        SqlConnection conn = new SqlConnection(connectionString )  ;
+        return conn ;  
+    }
 
 }

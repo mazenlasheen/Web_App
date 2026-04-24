@@ -14,8 +14,7 @@ namespace WEB_APPLICATION.Models
        
         public static  bool registerUser(string username , string password , Role role , string firstName , string lastName )  
         {
-            string conn_string = ConfigurationManager.ConnectionStrings["LearningPlatformDataBase"].ConnectionString;
-             SqlConnection conn = new SqlConnection(conn_string) ; 
+            conn = UtilityDAL.createConnection() ; 
              try {
                 
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password) ;
@@ -38,8 +37,7 @@ namespace WEB_APPLICATION.Models
         }
         public static int LoginAuthentication(string userName, string password)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["LearningPlatformDataBase"].ConnectionString;
-            SqlConnection conn = new SqlConnection(connectionString);
+            conn = UtilityDAL.createConnection() ; 
             try
             {
                 SqlCommand cmd = new SqlCommand("SELECT [password] FROM [User] WHERE userName = @userName", conn);
@@ -66,8 +64,7 @@ namespace WEB_APPLICATION.Models
         }
         public static User getUserById ( int userId ) 
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["LearningPlatformDataBase"].ConnectionString;
-            SqlConnection conn = new SqlConnection(connectionString );  
+            conn = UtilityDAL.createConnection() ; 
             try 
             {
                 
@@ -93,8 +90,7 @@ namespace WEB_APPLICATION.Models
         {
             if (role == null ) {role = "student" ;} // defualt role is student   
             List<User> specifiedUserList = new List<User>(); 
-            string connectionString = ConfigurationManager.ConnectionStrings["LearningPlatformDataBase"].ConnectionString ; 
-            SqlConnection conn = new SqlConnection(connectionString )  ; 
+            conn = UtilityDAL.createConnection() ; 
             SqlCommand cmd = new SqlCommand("SELECT * FROM [User] WHERE role = @wantedRole", conn );
             cmd.Parameters.AddWithValue("@wantedRole", role ) ;
          
@@ -123,7 +119,38 @@ namespace WEB_APPLICATION.Models
             catch (SqlException e ) {return null ; }
             finally {conn.Close() ;}
         }  
+        public static bool UpdateUserProfile(int userId, string firstName = "", string lastName = "")
+        {
+            if (firstName == "" && lastName == "") { return false; }
+            
+            SqlConnection conn = null; // tries to Error Hanlde the Case if the connection is not created 
+            try
+            {
+                conn = UtilityDAL.createConnection();
+                string query;
+                SqlCommand cmd;
 
+                if (lastName == "")
+                    query = "UPDATE [User] SET firstName = @firstName WHERE userId = @userId";
+                else if (firstName == "")
+                    query = "UPDATE [User] SET lastName = @lastName WHERE userId = @userId";
+                else
+                    query = "UPDATE [User] SET firstName = @firstName, lastName = @lastName WHERE userId = @userId";
+
+                cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@userId", userId);
+
+                if (firstName != "") cmd.Parameters.AddWithValue("@firstName", firstName);
+                if (lastName != "") cmd.Parameters.AddWithValue("@lastName", lastName);
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (SqlException e) { return false; }
+            finally { if (conn != null) conn.Close(); }
         }
+
+    }
     
 }
