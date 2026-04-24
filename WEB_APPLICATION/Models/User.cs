@@ -18,17 +18,28 @@ namespace WEB_APPLICATION.Models
 
     public class User
     {
-        public int UserID { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public Role Role { get; set; }
+        public  int userId { get; set; }
+        public  string userName  { get; set; }
+        public  string password { get; set; }
+        public  Role role { get; set; }
+        public  string firstName {get ; set; }
+        public  string lastName {get; set; }
+        public DateTime accountCreationDate {get; set ; } // interesting short cut 
 
-        public User(int userID, string username, string password, Role role)
-        {
-            UserID = userID;
-            Username = username;
-            Password = password;
-            Role = role;
-        }
+// Constructor for reading from DB (userId already exists)
+    public User(int userId, string userName, string password, Role role, string firstName, string lastName, DateTime accountCreationDate) 
+    {
+        this.userId = userId ;  
+        this.userName = userName ; 
+        this.password = password ; 
+        this.role = role ; 
+        this.firstName = firstName ; 
+        this.lastName = lastName ; 
+        this.accountCreationDate = accountCreationDate ; 
     }
+
+
+// Constructor for creating new user (no userId yet)
+
+}
 }

@@ -91,7 +91,7 @@ namespace WEB_APPLICATION.Models
         {
             if (role == null ) {role = "student" ;} // defualt role is student   
             List<User> specifiedUserList = new List<User>(); 
-            conn = UtilityDAL.createConnection() ; 
+            SqlConnection conn = UtilityDAL.createConnection() ; 
             SqlCommand cmd = new SqlCommand("SELECT * FROM [User] WHERE role = @wantedRole", conn );
             cmd.Parameters.AddWithValue("@wantedRole", role ) ;
          

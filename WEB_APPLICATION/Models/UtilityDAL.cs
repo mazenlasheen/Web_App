@@ -1,6 +1,7 @@
 using System ; 
-using System.SqlClient ; 
-using System.DateTime ; 
+using System.Data.SqlClient ; 
+using System.Configuration ; 
+namespace  WEB_APPLICATION.Models {
 public class UtilityDAL 
 {
     public static String  returnString(SqlDataReader reader , string column_name ) 
@@ -36,11 +37,12 @@ public class UtilityDAL
         if (role == "Admin") return Role.Admin;
         return Role.Student; // default fallback
     }
-    public static SqlConnection creatConnection () 
+    public static SqlConnection createConnection () 
     {
         string connectionString = ConfigurationManager.ConnectionStrings["LearningPlatformDataBase"].ConnectionString ; 
         SqlConnection conn = new SqlConnection(connectionString )  ;
         return conn ;  
     }
 
+}
 }
