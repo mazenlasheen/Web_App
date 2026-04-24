@@ -37,6 +37,13 @@ public class UtilityDAL
         SqlConnection conn = new SqlConnection(connectionString )  ;
         return conn ;  
     }
+     public static User.Role parseRole(string role)
+    {
+        if (role == "Student") return User.Role.Student;
+        if (role == "Instructor") return User.Role.Instructor;
+        if (role == "Admin") return Role.Admin;
+        return User.Role.Student; // default fallback
+    }
 
 }
 }

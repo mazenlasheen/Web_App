@@ -7,13 +7,7 @@ namespace WEB_APPLICATION.Models
 
     public class User
     {
-        public static User.Role ParseRole(string role)
-        {
-            if (role == "Student") return User.Role.Student;
-            if (role == "Instructor") return User.Role.Instructor;
-            if (role == "Admin") return Role.Admin;
-            return User.Role.Student; // default fallback
-        }
+
         public  int userId { get; set; }
         public  string userName  { get; set; }
         public  string password { get; set; }
