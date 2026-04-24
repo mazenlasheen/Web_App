@@ -32,13 +32,7 @@ namespace WEB_APPLICATION.Models
         this.lastName = lastName ; 
         this.accountCreationDate = accountCreationDate ; 
     }
-    public static  string roleToString(Role role ) 
-    {
-        if (role == Role.Admin ) {return "admin" ;}
-        else if (role == Role.Instructor ) {return "instructor" ;}
-        else if (role == Role.Student ) {return "student" ;}
-        return "" // in hte case it is unknown 
-    }
+
 
 
 // Constructor for creating new user (no userId yet)
