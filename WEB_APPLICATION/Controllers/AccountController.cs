@@ -9,9 +9,16 @@ namespace WEB_APPLICATION.Controllers
     public class AccountController : Controller
     {
         // GET: Account
-        public ActionResult Index()
+        [HttpGet]
+        public ActionResult Registration() 
         {
-            return View();
+            return View() ; 
+        }
+
+        [HttpPost] // post 
+        public ActionResult Registration(string userName , string password , string )
+        {
+
         }
     }
 }
