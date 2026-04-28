@@ -40,9 +40,9 @@ public class UtilityDAL
     // these 2 consecutive methods parse to and from Role.enum
      public static User.Role parseRole(string role)
     {
-        if (role == "Student") return User.Role.Student;
-        if (role == "Instructor") return User.Role.Instructor;
-        if (role == "Admin") return Role.Admin;
+        if (role == "student") return User.Role.Student;
+        if (role == "instructor") return User.Role.Instructor;
+        if (role == "admin") return Role.Admin;
         return User.Role.Student; // default fallback
     }
         public static  string roleToString(User.Role role ) 

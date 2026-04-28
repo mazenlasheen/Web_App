@@ -5,6 +5,7 @@ using System.Web;
 using System.Configuration;
 using System.Data.SqlClient ;
 using BCrypt.Net; 
+using System.Text.RegularExpressions; // this allows us to validate password 
 
 
 
@@ -12,7 +13,21 @@ namespace WEB_APPLICATION.Models
 {
     public class UserDAL // DAL basically stands for Data Access Layer 
     {   // THE METHOD BELOW RETURNS FALSE IF THE USERNAME ALREADY EXISTS 
-       
+       public static bool checkValidCredentials(string userName , string password ) 
+       {
+
+        if (string.IsNullOrEmpty(userName)) {return false ; }// check for empty or null passwords 
+        if (userName.Length <4  || userName.Length > 20 ) {return false ; }
+        // a username can only be letters numbers or underscores no special character
+        if (!Regex.IsMatch(userName , @"^[a-zA-Z0-9_]+$"))  return false ; 
+        if (char.IsDigit(userName[0])) return false ; // user name can not start with digit 
+        if (string.IsNullOrEmpty(password)) return false ; // pass can not be null or empty 
+        if (!Regex.IsMatch(password,@"[A-Z]")) return false ; // makes sure it has at least one upperCase
+        if (!Regex.IsMatch(password,@"[a-z]")) return false ; // makes sure it has at least one lower case 
+        if (!Regex.IsMatch(password,@"[0-9]")) return false ; // the password must at least has one digit 
+        // if non of these run then return true 
+        return true ; 
+       }
         public static  bool registerUser(string username , string password , User.Role userRole , string firstName , string lastName )  
         {
             SqlConnection  conn = UtilityDAL.createConnection() ; 
