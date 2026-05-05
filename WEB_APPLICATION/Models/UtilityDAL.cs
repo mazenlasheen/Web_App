@@ -31,6 +31,15 @@ public class UtilityDAL
         return value ; 
     }
 
+    public static TimeSpan returnTimeSpan (SqlDataReader , string columnName ) 
+    {
+        // getting the column index to be passed to the GetTimeSpan
+        int index = reader.GetOrdinal(columnName );
+         // quick if statements structure | statment that is evaluted true / false  ? value if true : value if false 
+        TimeSpan time = reader.IsDBNull(index) ? TimeSpan.minValue : reader.GetTimeSpan(index) ; 
+        return time ;  
+    }
+
     public static SqlConnection createConnection () 
     {
         string connectionString = ConfigurationManager.ConnectionStrings["LearningPlatformDataBase"].ConnectionString ; 

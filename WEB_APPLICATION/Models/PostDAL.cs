@@ -25,7 +25,7 @@ namespace WEB_APPLICATION.Models
             }
         }
 
-        public List<Post> GetPostsByForum(int forumId)
+        public List<Post> GetPostsByForum(int forumId) // this method returns a list of pots objects that belong to a specific forum 
         {
             List<Post> posts = new List<Post>();
    
@@ -38,14 +38,16 @@ namespace WEB_APPLICATION.Models
                 {
                     while (reader.Read())
                     {
-                        posts.Add(new Post(
-                            reader.GetInt32(0),
-                            reader.GetInt32(1),
-                            reader.GetInt32(2),
-                            reader.GetString(3),
-                            reader.GetString(4),
-                            reader.IsDBNull(5) ? null : reader.GetString(5)
-                        ));
+                        int postId = UtilityDAL.returnInt(reader, "postId");
+                        int userId = UtilityDAL.returnInt(reader, "userId");
+                        int forumId = UtilityDAL.returnInt(reader, "forumId");
+                        string title = UtilityDAL.returnString(reader, "title");
+                        string content = UtilityDAL.returnString(reader, "content");
+                        string imagePath = UtilityDAL.returnString(reader, "imagePath");
+
+                        Post post = new Post(postId, userId, forumId, title, content, imagePath);
+
+                        posts.Add(post);
                     }
                 }
             }
