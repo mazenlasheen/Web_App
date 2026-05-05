@@ -5,11 +5,10 @@ namespace WEB_APPLICATION.Models
 {
     public class QuestionDAL
     {
-        private string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["LearningPlatformDB"].ConnectionString;
-
+        private SqlConnection conn = UtilityDAL.createConnection() ; 
         public void CreateQuestion(Question question)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+
             using (SqlCommand cmd = new SqlCommand(
                 "INSERT INTO Question (assessmentId, questionType, questionText, correctAnswer, questionAnswer) VALUES (@assessmentId, @questionType, @questionText, @correctAnswer, @questionAnswer)", conn))
             {
@@ -26,7 +25,7 @@ namespace WEB_APPLICATION.Models
         public List<Question> GetQuestionsByAssessment(int assessmentId)
         {
             List<Question> questions = new List<Question>();
-            using (SqlConnection conn = new SqlConnection(connStr))
+
             using (SqlCommand cmd = new SqlCommand(
                 "SELECT questionId, assessmentId, questionType, questionText, correctAnswer, questionAnswer FROM Question WHERE assessmentId = @assessmentId", conn))
             {
@@ -47,7 +46,7 @@ namespace WEB_APPLICATION.Models
 
         public void UpdateQuestion(Question question)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+
             using (SqlCommand cmd = new SqlCommand(
                 "UPDATE Question SET questionType = @questionType, questionText = @questionText, correctAnswer = @correctAnswer, questionAnswer = @questionAnswer WHERE questionId = @questionId", conn))
             {
@@ -63,7 +62,7 @@ namespace WEB_APPLICATION.Models
 
         public void DeleteQuestion(int questionId)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+
             using (SqlCommand cmd = new SqlCommand("DELETE FROM Question WHERE questionId = @questionId", conn))
             {
                 cmd.Parameters.AddWithValue("@questionId", questionId);
@@ -74,7 +73,7 @@ namespace WEB_APPLICATION.Models
 
         public bool CheckAnswer(int questionId, string answer)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+
             using (SqlCommand cmd = new SqlCommand(
                 "SELECT correctAnswer FROM Question WHERE questionId = @questionId", conn))
             {
