@@ -8,16 +8,16 @@ namespace WEB_APPLICATION.Models
         public int forumId { get; set; }
         public int userId { get; set; }
         public string title { get; set; }
-        public string textcontent { get; set; }
+        public string textContent { get; set; }
         public string imageUrl { get; set; }
         public DateTime postDate { get; set; }
         public TimeSpan  postTime { get; set; }
         // used for creation 
-        public Post(int postId, int forumId, int userId, string title, string textContent, string imageUrl)
+        public Post(int postId, int forumId , int userId, string title, string textContent, string imageUrl)
         {
-            this.postId = postid;
-            this.forumId = forumiD;
-            this.userId = useriD;
+            this.postId = postId;
+            this.forumId = forumId;
+            this.userId = userId;
             this.title = title;
             this.textContent = textContent;
             this.imageUrl = imageUrl;
@@ -27,9 +27,9 @@ namespace WEB_APPLICATION.Models
         // overloaded construction for reading 
         public Post(int postId, int forumId, int userId, string title, string textContent, string imageUrl , DateTime postDate , TimeSpan postTime ) 
         {
-            this.postId = postiD;
-            this.forumId = forumiD;
-            this.userId = useriD;
+            this.postId = postId;
+            this.forumId = forumId;
+            this.userId = userId;
             this.title = title;
             this.textContent = textContent;
             this.imageUrl = imageUrl;
