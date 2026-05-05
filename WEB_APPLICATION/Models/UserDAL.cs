@@ -5,6 +5,7 @@ using System.Web;
 using System.Configuration;
 using System.Data.SqlClient ;
 using BCrypt.Net; 
+namespace WEB_APPLICATION.Models 
 using System.Text.RegularExpressions; // this allows us to validate password 
 
 
@@ -13,7 +14,8 @@ namespace WEB_APPLICATION.Models
 {
     public class UserDAL // DAL basically stands for Data Access Layer 
     {   // THE METHOD BELOW RETURNS FALSE IF THE USERNAME ALREADY EXISTS 
-       public static bool checkValidCredentials(string userName , string password ) 
+       prviate Sqlconenction conn = UtilityDAL.createConnection();
+       public static  checkValidCredentials(string userName , string password ) 
        {
 
         if (string.IsNullOrEmpty(userName)) {return false ; }// check for empty or null passwords 
@@ -28,9 +30,9 @@ namespace WEB_APPLICATION.Models
         // if non of these run then return true 
         return true ; 
        }
-        public static  bool registerUser(string username , string password , User.Role userRole , string firstName , string lastName )  
+        public static   registerUser(string username , string password , User.Role userRole , string firstName , string lastName )  
         {
-            SqlConnection  conn = UtilityDAL.createConnection() ; 
+           
              try {
                 
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password) ;
@@ -51,9 +53,9 @@ namespace WEB_APPLICATION.Models
              } catch (SqlException e ) {return false ; } 
              finally {conn.Close() ;}
         }
-        public static int LoginAuthentication(string userName, string password)
+        public  int LoginAuthentication(string userName, string password)
         {
-             SqlConnection conn = UtilityDAL.createConnection() ; 
+            
             try
             {
                 SqlCommand cmd = new SqlCommand("SELECT [password] FROM [User] WHERE userName = @userName", conn);
@@ -78,9 +80,9 @@ namespace WEB_APPLICATION.Models
                 conn.Close();
             }
         }
-        public static User getUserById ( int userId ) 
+        public static  getUserById ( int userId ) 
         {
-            SqlConnection  conn = UtilityDAL.createConnection() ; 
+           
             try 
             {
                 
@@ -102,11 +104,10 @@ namespace WEB_APPLICATION.Models
             catch (SqlException e ) {return null ; }
             finally {conn.Close() ;}
         }  
-        public static List<User> getAllUsers(string userRole)  // this is an Admin only method 
+        public  List<User> getAllUsers(string userRole)  // this is an Admin only method 
         {
             if (userRole == null ) {userRole = "student" ;} // defualt role is student   
             List<User> specifiedUserList = new List<User>(); 
-            SqlConnection conn = UtilityDAL.createConnection() ; 
             SqlCommand cmd = new SqlCommand("SELECT * FROM [User] WHERE role = @wantedRole", conn );
             cmd.Parameters.AddWithValue("@wantedRole", userRole  ) ;
          
@@ -135,14 +136,14 @@ namespace WEB_APPLICATION.Models
             catch (SqlException e ) {return null ; }
             finally {conn.Close() ;}
         }  
-        public static bool updateUserProfile(int userId, string firstName = "", string lastName = "")
+        public static  updateUserProfile(int userId, string firstName = "", string lastName = "")
         {
             if (firstName == "" && lastName == "") { return false; }
             
             SqlConnection conn = null; // tries to Error Hanlde the Case if the connection is not created 
             try
             {
-                conn = UtilityDAL.createConnection();
+
                 string query;
                 SqlCommand cmd;
 
@@ -166,12 +167,11 @@ namespace WEB_APPLICATION.Models
             catch (SqlException e) { return false; }
             finally { if (conn != null) conn.Close(); }
         }
-        public static bool UpdatePassword(int userId, string newPassword)
+        public  bool UpdatePassword(int userId, string newPassword)
         {
             SqlConnection conn = null;
             try
             {
-                conn = UtilityDAL.createConnection();
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword);
                 SqlCommand cmd = new SqlCommand("UPDATE [User] SET [password] = @hashedPassword WHERE userId = @userId", conn);
                 cmd.Parameters.AddWithValue("@hashedPassword", hashedPassword);
@@ -183,12 +183,12 @@ namespace WEB_APPLICATION.Models
             catch (SqlException e) { return false; }
             finally { if (conn != null) conn.Close(); }
         }
-        public static bool deleteUser(int userId ) 
+        public  bool deleteUser(int userId ) 
         {
             SqlConnection conn = null;
             try
             {
-                conn = UtilityDAL.createConnection();
+
                 SqlCommand cmd = new SqlCommand("DELETE  FROM [User] WHERE   userId = @userId", conn);
                 cmd.Parameters.AddWithValue("@userId", userId);
                 conn.Open();

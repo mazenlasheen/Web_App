@@ -5,11 +5,11 @@ namespace WEB_APPLICATION.Models
 {
     public class AssessmentDAL
     {
-        private string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["LearningPlatformDB"].ConnectionString;
+       SqlConnection conn = UtilityDAL.createConnection() ; // globalizing the connection
 
         public void CreateAssessment(Assessment assessment)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+            
             using (SqlCommand cmd = new SqlCommand(
                 "INSERT INTO Assessment (lessonId, attemptNumber) VALUES (@lessonId, @attemptNumber)", conn))
             {
@@ -23,7 +23,6 @@ namespace WEB_APPLICATION.Models
         public List<Assessment> GetAssessmentsByLesson(int lessonId)
         {
             List<Assessment> assessments = new List<Assessment>();
-            using (SqlConnection conn = new SqlConnection(connStr))
             using (SqlCommand cmd = new SqlCommand(
                 "SELECT assessmentId, lessonId, attemptNumber FROM Assessment WHERE lessonId = @lessonId", conn))
             {
@@ -44,7 +43,7 @@ namespace WEB_APPLICATION.Models
 
         public Assessment GetAssessmentById(int assessmentId)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+            
             using (SqlCommand cmd = new SqlCommand(
                 "SELECT assessmentId, lessonId, attemptNumber FROM Assessment WHERE assessmentId = @assessmentId", conn))
             {
