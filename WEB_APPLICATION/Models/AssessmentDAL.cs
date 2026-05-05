@@ -64,7 +64,6 @@ namespace WEB_APPLICATION.Models
 
         public void DeleteAssessment(int assessmentId)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
             using (SqlCommand cmd = new SqlCommand("DELETE FROM Assessment WHERE assessmentId = @assessmentId", conn))
             {
                 cmd.Parameters.AddWithValue("@assessmentId", assessmentId);
