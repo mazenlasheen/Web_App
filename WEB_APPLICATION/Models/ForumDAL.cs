@@ -5,11 +5,11 @@ namespace WEB_APPLICATION.Models
 {
     public class ForumDAL
     {
-        private string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["LearningPlatformDB"].ConnectionString;
+        private SqlConnection conn = UtilityDAL.createConnection(); 
 
         public void CreateForum(Forum forum)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+
             using (SqlCommand cmd = new SqlCommand(
                 "INSERT INTO Forum (courseId, title, postFlair) VALUES (@courseId, @title, @postFlair)", conn))
             {
@@ -24,7 +24,7 @@ namespace WEB_APPLICATION.Models
         public List<Forum> GetForumsByCourse(int courseId)
         {
             List<Forum> forums = new List<Forum>();
-            using (SqlConnection conn = new SqlConnection(connStr))
+
             using (SqlCommand cmd = new SqlCommand(
                 "SELECT forumId, courseId, title, postFlair FROM Forum WHERE courseId = @courseId", conn))
             {
@@ -43,7 +43,6 @@ namespace WEB_APPLICATION.Models
 
         public void DeleteForum(int forumId)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
             using (SqlCommand cmd = new SqlCommand("DELETE FROM Forum WHERE forumId = @forumId", conn))
             {
                 cmd.Parameters.AddWithValue("@forumId", forumId);
