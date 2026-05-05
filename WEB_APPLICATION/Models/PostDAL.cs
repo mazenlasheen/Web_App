@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Web.Management;
 
- 
+
 
 namespace WEB_APPLICATION.Models
 {
@@ -10,8 +11,9 @@ namespace WEB_APPLICATION.Models
     {
       private SqlConnection conn = UtilityDAL.createConnection(); 
 
-        public  bool  void CreatePost(Post post)
+        public  bool CreatePost(Post post)
         {
+            bool success = false ; 
             try 
             {
                 using (SqlCommand cmd = new SqlCommand(
@@ -28,36 +30,47 @@ namespace WEB_APPLICATION.Models
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
+                success = true ; 
             } 
             catch (SqlException  e ) 
             {
+                success = false ; 
                 Console.WriteLine(e.Message) ;     
             }
             finally 
             {
+                
                 conn.Close() ; 
+                
             }
+             return success ; // after the connection close return the status 
+           
         }
 
-        public List<Post> GetPostsByForum(int forumId) // this method returns a list of pots objects that belong to a specific forum 
+        public List<Post> GetPostsByForum(int requiredForumId) // this method returns a list of pots objects that belong to a specific forum 
         {
             List<Post> posts = new List<Post>();
-   
+            int postId ;
+            int userId ;
+            int forumId ;
+            string title ;
+            string content ;
+            string imagePath ;
             using (SqlCommand cmd = new SqlCommand(
                 "SELECT postId, forumId, userId, title, textContent, imageUrl FROM Post WHERE forumId = @forumId", conn))
             {
-                cmd.Parameters.AddWithValue("@forumId", forumId);
+                cmd.Parameters.AddWithValue("@forumId", requiredForumId);
                 conn.Open();
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        int postId = UtilityDAL.returnInt(reader, "postId");
-                        int userId = UtilityDAL.returnInt(reader, "userId");
-                        int forumId = UtilityDAL.returnInt(reader, "forumId");
-                        string title = UtilityDAL.returnString(reader, "title");
-                        string content = UtilityDAL.returnString(reader, "textContent");
-                        string imagePath = UtilityDAL.returnString(reader, "imageUrl");
+                        postId = UtilityDAL.returnInt(reader, "postId");
+                        userId = UtilityDAL.returnInt(reader, "userId");
+                        forumId = UtilityDAL.returnInt(reader, "forureturnmId");
+                        title = UtilityDAL.returnString(reader, "title");
+                        content = UtilityDAL.returnString(reader, "textContent");
+                        imagePath = UtilityDAL.returnString(reader, "imageUrl");
 
                         Post post = new Post(postId, userId, forumId, title, content, imagePath);
 
@@ -74,10 +87,10 @@ namespace WEB_APPLICATION.Models
             using (SqlCommand cmd = new SqlCommand(
                 "UPDATE Post SET title = @title, textContent = @textContent, imageUrl = @imageUrl WHERE postId = @postId", conn))
             {
-                cmd.Parameters.AddWithValue("@title", post.Title);
-                cmd.Parameters.AddWithValue("@textContent", post.TextContent);
-                cmd.Parameters.AddWithValue("@imageUrl", (object)post.ImageUrl ?? System.DBNull.Value);
-                cmd.Parameters.AddWithValue("@postId", post.PostID);
+                cmd.Parameters.AddWithValue("@title", post.title);
+                cmd.Parameters.AddWithValue("@textContent", post.textContent);
+                cmd.Parameters.AddWithValue("@imageUrl", (object)post.imageUrl ?? System.DBNull.Value);
+                cmd.Parameters.AddWithValue("@postId", post.postId );
                 conn.Open();
                 cmd.ExecuteNonQuery();
             }
