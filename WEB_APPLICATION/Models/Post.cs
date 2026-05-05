@@ -4,25 +4,28 @@ namespace WEB_APPLICATION.Models
 {
     public class Post
     {
-        public int PostID { get; set; }
-        public int ForumID { get; set; }
-        public int UserID { get; set; }
-        public string Title { get; set; }
-        public string TextContent { get; set; }
-        public string ImageUrl { get; set; }
-        public DateTime PostDate { get; set; }
-        public DateTime PostTime { get; set; }
-
-        public Post(int postID, int forumID, int userID, string title, string textContent, string imageUrl)
+        public int postId { get; set; }
+        public int forumId { get; set; }
+        public int userId { get; set; }
+        public string title { get; set; }
+        public string textcontent { get; set; }
+        public string imageUrl { get; set; }
+        public DateTime postDate { get; set; }
+        public TimeSpan  postTime { get; set; }
+        // used for creation 
+        public Post(int postId, int forumId, int userId, string title, string textContent, string imageUrl)
         {
-            PostID = postID;
-            ForumID = forumID;
-            UserID = userID;
-            Title = title;
-            TextContent = textContent;
-            ImageUrl = imageUrl;
-            PostDate = DateTime.UtcNow;
-            PostTime = DateTime.UtcNow;
+            this.postId = postID;
+            this.forumId = forumID;
+            this.userId = userID;
+            this.title = title;
+            this.textContent = textContent;
+            this.imageUrl = imageUrl;
+            this.postDate = DateTime.UtcNow.Date ; // returns only the date to match SQLs date 
+            this.postTime = DateTime.UtcNow.TimeOfDay; // returns a TimeSpan value 
         }
+        // overloaded construction for reading 
+        public Post()
+    
     }
 }

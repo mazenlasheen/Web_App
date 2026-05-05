@@ -42,8 +42,8 @@ namespace WEB_APPLICATION.Models
                         int userId = UtilityDAL.returnInt(reader, "userId");
                         int forumId = UtilityDAL.returnInt(reader, "forumId");
                         string title = UtilityDAL.returnString(reader, "title");
-                        string content = UtilityDAL.returnString(reader, "content");
-                        string imagePath = UtilityDAL.returnString(reader, "imagePath");
+                        string content = UtilityDAL.returnString(reader, "textContent");
+                        string imagePath = UtilityDAL.returnString(reader, "imageUrl");
 
                         Post post = new Post(postId, userId, forumId, title, content, imagePath);
 
