@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+
+ 
 
 namespace WEB_APPLICATION.Models
 {
@@ -7,21 +10,32 @@ namespace WEB_APPLICATION.Models
     {
       private SqlConnection conn = UtilityDAL.createConnection(); 
 
-        public void CreatePost(Post post)
+        public  bool  void CreatePost(Post post)
         {
- 
-            using (SqlCommand cmd = new SqlCommand(
-                "INSERT INTO Post (forumId, userId, title, textContent, imageUrl, postDate, postTime) VALUES (@forumId, @userId, @title, @textContent, @imageUrl, @postDate, @postTime)", conn))
+            try 
             {
-                cmd.Parameters.AddWithValue("@forumId", post.ForumID);
-                cmd.Parameters.AddWithValue("@userId", post.UserID);
-                cmd.Parameters.AddWithValue("@title", post.Title);
-                cmd.Parameters.AddWithValue("@textContent", post.TextContent);
-                cmd.Parameters.AddWithValue("@imageUrl", (object)post.ImageUrl ?? System.DBNull.Value);
-                cmd.Parameters.AddWithValue("@postDate", post.PostDate);
-                cmd.Parameters.AddWithValue("@postTime", post.PostTime);
-                conn.Open();
-                cmd.ExecuteNonQuery();
+                using (SqlCommand cmd = new SqlCommand(
+                    "INSERT INTO Post (forumId, userId, title, textContent, imageUrl, postDate, postTime) VALUES (@forumId, @userId, @title, @textContent, @imageUrl, @postDate, @postTime)", conn))
+                {
+                    cmd.Parameters.AddWithValue("@forumId", post.forumId);
+                    cmd.Parameters.AddWithValue("@userId", post.userId);
+                    cmd.Parameters.AddWithValue("@title", post.title);
+                    cmd.Parameters.AddWithValue("@textContent", post.textContent);
+                    // casting ImageUrl to an object as ?? needs both sides to be compatible but if 
+                    cmd.Parameters.AddWithValue("@imageUrl", (object)post.imageUrl ?? System.DBNull.Value); // a muhc shorter version of if else 
+                    cmd.Parameters.AddWithValue("@postDate", post.postDate);
+                    cmd.Parameters.AddWithValue("@postTime", post.postTime);
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            } 
+            catch (SqlException  e ) 
+            {
+                Console.WriteLine(e.Message) ;     
+            }
+            finally 
+            {
+                conn.Close() ; 
             }
         }
 

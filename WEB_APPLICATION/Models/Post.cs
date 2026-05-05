@@ -15,9 +15,9 @@ namespace WEB_APPLICATION.Models
         // used for creation 
         public Post(int postId, int forumId, int userId, string title, string textContent, string imageUrl)
         {
-            this.postId = postID;
-            this.forumId = forumID;
-            this.userId = userID;
+            this.postId = postid;
+            this.forumId = forumiD;
+            this.userId = useriD;
             this.title = title;
             this.textContent = textContent;
             this.imageUrl = imageUrl;
@@ -25,7 +25,17 @@ namespace WEB_APPLICATION.Models
             this.postTime = DateTime.UtcNow.TimeOfDay; // returns a TimeSpan value 
         }
         // overloaded construction for reading 
-        public Post()
+        public Post(int postId, int forumId, int userId, string title, string textContent, string imageUrl , DateTime postDate , TimeSpan postTime ) 
+        {
+            this.postId = postiD;
+            this.forumId = forumiD;
+            this.userId = useriD;
+            this.title = title;
+            this.textContent = textContent;
+            this.imageUrl = imageUrl;
+            this.postDate = postDate  ;  
+            this.postTime = postTime ; 
+        }
     
     }
 }
