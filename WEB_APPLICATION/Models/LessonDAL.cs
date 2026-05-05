@@ -5,11 +5,12 @@ namespace WEB_APPLICATION.Models
 {
     public class LessonDAL
     {
-        private string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["LearningPlatformDB"].ConnectionString;
+        private SqlConnection conn = UtilityDAL.createConnection(); 
+         // ensures that whenever a lesson dal object is created its connection is created with it 
 
         public void CreateLesson(Lesson lesson)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+
             using (SqlCommand cmd = new SqlCommand(
                 "INSERT INTO Lesson (courseId, lessonTitle, lessonContent) VALUES (@courseId, @lessonTitle, @lessonContent)", conn))
             {
@@ -24,7 +25,6 @@ namespace WEB_APPLICATION.Models
         public List<Lesson> GetLessonsByCourse(int courseId)
         {
             List<Lesson> lessons = new List<Lesson>();
-            using (SqlConnection conn = new SqlConnection(connStr))
             using (SqlCommand cmd = new SqlCommand(
                 "SELECT lessonId, courseId, lessonTitle, lessonContent FROM Lesson WHERE courseId = @courseId", conn))
             {
@@ -48,7 +48,7 @@ namespace WEB_APPLICATION.Models
 
         public Lesson GetLessonById(int lessonId)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+
             using (SqlCommand cmd = new SqlCommand(
                 "SELECT lessonId, courseId, lessonTitle, lessonContent FROM Lesson WHERE lessonId = @lessonId", conn))
             {
@@ -65,7 +65,7 @@ namespace WEB_APPLICATION.Models
 
         public void UpdateLesson(Lesson lesson)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+
             using (SqlCommand cmd = new SqlCommand(
                 "UPDATE Lesson SET lessonTitle = @lessonTitle, lessonContent = @lessonContent WHERE lessonId = @lessonId", conn))
             {
@@ -74,12 +74,13 @@ namespace WEB_APPLICATION.Models
                 cmd.Parameters.AddWithValue("@lessonId", lesson.LessonID);
                 conn.Open();
                 cmd.ExecuteNonQuery();
+                conn.Close() ; 
             }
         }
 
         public void DeleteLesson(int lessonId)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+ 
             using (SqlCommand cmd = new SqlCommand("DELETE FROM Lesson WHERE lessonId = @lessonId", conn))
             {
                 cmd.Parameters.AddWithValue("@lessonId", lessonId);
