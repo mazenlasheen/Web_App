@@ -6,17 +6,15 @@ using System.Configuration;
 using System.Data.SqlClient ;
 using BCrypt.Net; 
 using System.Data ; 
-namespace WEB_APPLICATION.Models 
 using System.Text.RegularExpressions; // this allows us to validate password 
-
 
 
 namespace WEB_APPLICATION.Models
 {
     public class UserDAL // DAL basically stands for Data Access Layer 
     {   // THE METHOD BELOW RETURNS FALSE IF THE USERNAME ALREADY EXISTS 
-       prviate Sqlconenction conn = UtilityDAL.createConnection();
-       public static  checkValidCredentials(string userName , string password ) 
+       private SqlConnection conn = UtilityDAL.createConnection();
+       public bool   checkValidCredentials(string userName , string password ) 
        {
 
         if (string.IsNullOrEmpty(userName)) {return false ; }// check for empty or null passwords 
@@ -31,7 +29,7 @@ namespace WEB_APPLICATION.Models
         // if non of these run then return true 
         return true ; 
        }
-        public static   registerUser(string username , string password , User.Role userRole , string firstName , string lastName )  
+        public bool  registerUser(string username , string password , User.Role userRole , string firstName , string lastName )  
         {
            
              try {
@@ -164,7 +162,7 @@ namespace WEB_APPLICATION.Models
                 conn.Close() ;
             }
         }  
-        public static  updateUserProfile(int userId, string firstName = "", string lastName = "")
+        public bool   updateUserProfile(int userId, string firstName = "", string lastName = "")
         {
             if (firstName == "" && lastName == "") { return false; }
             
