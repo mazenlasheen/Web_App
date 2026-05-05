@@ -5,11 +5,11 @@ namespace WEB_APPLICATION.Models
 {
     public class PostDAL
     {
-        private string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["LearningPlatformDB"].ConnectionString;
+      private SqlConnection conn = UtilityDAL.createConnection(); 
 
         public void CreatePost(Post post)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+ 
             using (SqlCommand cmd = new SqlCommand(
                 "INSERT INTO Post (forumId, userId, title, textContent, imageUrl, postDate, postTime) VALUES (@forumId, @userId, @title, @textContent, @imageUrl, @postDate, @postTime)", conn))
             {
@@ -28,7 +28,7 @@ namespace WEB_APPLICATION.Models
         public List<Post> GetPostsByForum(int forumId)
         {
             List<Post> posts = new List<Post>();
-            using (SqlConnection conn = new SqlConnection(connStr))
+   
             using (SqlCommand cmd = new SqlCommand(
                 "SELECT postId, forumId, userId, title, textContent, imageUrl FROM Post WHERE forumId = @forumId", conn))
             {
@@ -54,7 +54,7 @@ namespace WEB_APPLICATION.Models
 
         public void UpdatePost(Post post)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+
             using (SqlCommand cmd = new SqlCommand(
                 "UPDATE Post SET title = @title, textContent = @textContent, imageUrl = @imageUrl WHERE postId = @postId", conn))
             {
@@ -69,7 +69,7 @@ namespace WEB_APPLICATION.Models
 
         public void DeletePost(int postId)
         {
-            using (SqlConnection conn = new SqlConnection(connStr))
+
             using (SqlCommand cmd = new SqlCommand("DELETE FROM Post WHERE postId = @postId", conn))
             {
                 cmd.Parameters.AddWithValue("@postId", postId);
