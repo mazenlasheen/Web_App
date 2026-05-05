@@ -74,7 +74,7 @@ namespace WEB_APPLICATION.Models
                 cmd.Parameters.AddWithValue("@lessonId", lesson.LessonID);
                 conn.Open();
                 cmd.ExecuteNonQuery();
-                conn.Close() ; 
+    
             }
         }
 

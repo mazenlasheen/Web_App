@@ -25,8 +25,8 @@ public class UtilityDAL
     public static DateTime returnDateTime (SqlDataReader reader , string columnName ) 
     {
         // index of the column 
-        int index_r = reader.GetOrdinal(columnName) ;
-        // assigning value 
+        int index_r = reader.GetOrdinal(columnName) ; // gets the index of that specific column in the row 
+        // assigning value  - before checking if the value in this row at that specific row is empty or not 
         DateTime  value = reader.IsDBNull(index_r) ? DateTime.MinValue : reader.GetDateTime(index_r) ;
         return value ; 
     }
@@ -52,6 +52,7 @@ public class UtilityDAL
         else if (role == User.Role.Student ) {return "student" ;}
         return "" ; // in hte case it is unknown 
     }
+
 
 }
 }
