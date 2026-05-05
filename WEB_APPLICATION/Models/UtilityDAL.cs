@@ -47,7 +47,7 @@ public class UtilityDAL
         return conn ;  
     }
     // these 2 consecutive methods parse to and from Role.enum
-     public static User.Role parseRole(string role)
+     public static User.Role parseStringToRole(string role)
     {
         if (role == "student") return User.Role.Student;
         if (role == "instructor") return User.Role.Instructor;

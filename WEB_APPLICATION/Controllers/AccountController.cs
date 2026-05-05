@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using namespace WEB_APPLICATION.Models;
+using WEB_APPLICATION.Models;
 
 
 namespace WEB_APPLICATION.Controllers
@@ -22,20 +22,39 @@ namespace WEB_APPLICATION.Controllers
         public ActionResult Registration(string userName , string password , string role , string firstName , string lastName   )
         {
             // checking for valid credentials 
-            boolean valid = User.checkValidCredentials(userName , password ) ;
-            if (!valid) 
+            UserDAL userDal = new UserDAL() ; 
+            
+            User.Role  userRole = UtilityDAL.parseStringToRole(role.ToLower());
+            bool valid = userDal.checkValidCredentials(userName , password ) ;
+           
+            if (!valid  ) // check if credentials are valid first ; 
             {
-                ViewBag.Error = "The entered credentials are not vaild !"
-                return View()
-            }
-            User.Role  userRole = UtilityDal.parseRole(role.lower());
-
-            boolean success =  UserDAL.registerUser(userName , password, userRole , firstName , lastName )
-            if (success ) 
-            {
-                TempData["success"] = "You have successfullly Registered into Edu Nest " ;
-                return
-            }
+                ViewBag.Error = "The entered credentials are not vaild !";
+                return View();
+            } 
+            else
+            { // then attempt to register 
+                bool success =  userDal.registerUser(userName , password, userRole , firstName , lastName ) ;
+                if (success )
+                {
+                    TempData["success"] = "You have successfullly Registered into Edu Nest " ;
+                    return RedirectToAction("Login","Account") ; // redirects it to the login page 
+                } 
+                else
+                {
+                    ViewBag.Error = "An issue occured while Attempting registration " ;     
+                    return View() ; // returns to the registration page 
+                }                
+            }  
+        }
+        
+        [HttpGet]
+        public ActionResult Login()
+        {
+            return View() ; // this basically goes to Views/Account/Login.cshtml and then gets the html code 
         }
     }
 }
+    
+    
+    

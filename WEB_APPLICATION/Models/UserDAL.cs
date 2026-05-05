@@ -104,7 +104,7 @@ namespace WEB_APPLICATION.Models
                         int id = UtilityDAL.returnInt(reader, "userId");
                         string userName = UtilityDAL.returnString(reader, "userName");
                         string password = UtilityDAL.returnString(reader, "password");
-                        User.Role role = UtilityDAL.parseRole(UtilityDAL.returnString(reader, "role"));
+                        User.Role role = UtilityDAL.parseStringToRole(UtilityDAL.returnString(reader, "role"));
                         string firstName = UtilityDAL.returnString(reader, "firstName");
                         string lastName = UtilityDAL.returnString(reader, "lastName");
                         DateTime datetime = UtilityDAL.returnDateTime(reader, "accountCreationDate");
@@ -142,7 +142,7 @@ namespace WEB_APPLICATION.Models
                             int id = UtilityDAL.returnInt(reader, "userId" ) ; 
                             string userName = UtilityDAL.returnString(reader,"userName") ;
                             string  password = UtilityDAL.returnString(reader,"password") ; 
-                            User.Role readRole  = UtilityDAL.parseRole(UtilityDAL.returnString(reader,"role")) ;
+                            User.Role readRole  = UtilityDAL.parseStringToRole(UtilityDAL.returnString(reader,"role")) ;
                             string firstName = UtilityDAL.returnString(reader,"firstName") ;
                             string lastName =  UtilityDAL.returnString(reader,"lastName") ;
                             DateTime datetime = UtilityDAL.returnDateTime(reader,"accountCreationDate");
