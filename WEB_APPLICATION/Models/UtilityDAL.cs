@@ -42,15 +42,15 @@ public class UtilityDAL
     {
         if (role == "student") return User.Role.Student;
         if (role == "instructor") return User.Role.Instructor;
-        if (role == "admin") return Role.Admin;
+        if (role == "admin") return User.Role.Admin;
         return User.Role.Student; // default fallback
     }
         public static  string roleToString(User.Role role ) 
     {
-        if (role == Role.Admin ) {return "admin" ;}
-        else if (role == Role.Instructor ) {return "instructor" ;}
-        else if (role == Role.Student ) {return "student" ;}
-        return "" // in hte case it is unknown 
+        if (role == User.Role.Admin ) {return "admin" ;}
+        else if (role == User.Role.Instructor ) {return "instructor" ;}
+        else if (role == User.Role.Student ) {return "student" ;}
+        return "" ; // in hte case it is unknown 
     }
 
 }

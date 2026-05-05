@@ -40,7 +40,7 @@ namespace WEB_APPLICATION.Models
                 SqlCommand insert = new SqlCommand("INSERT INTO [User] (userName , [password],role , firstName, lastName , accountCreationDate ) VALUES (@userName , @password, @role , @firstName , @lastName , @accountCreationDate ) ", conn) ;
                 insert.Parameters.AddWithValue("@userName" , username ) ;
                 insert.Parameters.AddWithValue("@password",  hashedPassword ) ;
-                insert.Parameters.AddWithValue("@userRole", UtilityDAL.roleToString(userRole)) ;
+                insert.Parameters.AddWithValue("@role", UtilityDAL.roleToString(userRole)) ;
                 insert.Parameters.AddWithValue("@firstName", firstName ) ;
                 insert.Parameters.AddWithValue("@lastName",  lastName ) ;
                 insert.Parameters.AddWithValue("@accountCreationDate", DateTime.Now) ;
