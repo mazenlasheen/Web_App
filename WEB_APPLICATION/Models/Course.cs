@@ -4,21 +4,30 @@ namespace WEB_APPLICATION.Models
 {
     public class Course
     {
-        public int CourseID { get; set; }
-        public int UserID { get; set; }
-        public string CourseDescription { get; set; }
-        public string CourseName { get; set; }
-        public bool ActiveStatus { get; set; }
-        public string ImageUrl { get; set; }
+        public int courseId { get; set; }
+        public int userId { get; set; }
+        public string courseDescription { get; set; }
+        public string courseName { get; set; }
+        public bool activeStatus { get; set; }
+        public string imageUrl { get; set; }
 
-        public Course(int courseID, int userID, string courseName, string courseDescription, string imageUrl)
+        public Course(int courseId, int userId, string courseName, string courseDescription, string imageUrl)
         {
-            CourseID = courseID;
-            UserID = userID;
-            CourseName = courseName;
-            CourseDescription = courseDescription;
-            ImageUrl = imageUrl;
-            ActiveStatus = true;
+            this.courseId = courseId;
+            this.userId = userId;
+            this.courseName = courseName;
+            this.courseDescription = courseDescription;
+            this.imageUrl = imageUrl;
+            this.activeStatus = true;
+        }
+        public Course(int courseId, int userId, string courseName, string courseDescription, string imageUrl, bool activeStatus)
+        {
+            this.courseId = courseId;
+            this.userId = userId;
+            this.courseName = courseName;
+            this.courseDescription = courseDescription;
+            this.imageUrl = imageUrl;
+            this.activeStatus = activeStatus;
         }
     }
 }

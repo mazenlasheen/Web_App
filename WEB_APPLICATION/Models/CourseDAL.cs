@@ -42,8 +42,8 @@ namespace WEB_APPLICATION.Models
                 SqlCommand cmd = new SqlCommand(
                     "UPDATE Course SET courseName = @courseName , courseDescription = @courseDescription  WHERE courseId = @courseId ", conn);
                 cmd.Parameters.AddWithValue("@courseId", courseId );
-                cmd.Parameters.AddWithValue("courseName", courseName );
-                cmd.Parameters.AddWithValue("courseDescription", courseDescription );
+                cmd.Parameters.AddWithValue("@courseName", courseName );
+                cmd.Parameters.AddWithValue("@courseDescription", courseDescription );
                 if (cmd.ExecuteNonQuery() > 0) 
                     success = true;
             }
@@ -51,7 +51,47 @@ namespace WEB_APPLICATION.Models
             finally { conn.Close(); }
             return success;
         }
+        
 
+        // The method below takes an a user ID and returns all courses created by that User 
+        public List<Course> getCourseByInstructor(int specifiedUserId)
+        {
+            int courseId ; 
+            int userId ; // this here refers to the ID of the instructor who created thsi 
+            String courseDescription ; 
+            String courseName ; 
+            bool activeStatus ; 
+            String imageUrl ; 
+            List<Course> courseList = new List<Course>();
+            try
+            {
+                conn.Open();
+                using ( SqlCommand cmd = new SqlCommand(
+                    "SELECT * FROM Course  WHERE userId = @specifiedUserId", conn))
+                {
+                    cmd.Parameters.AddWithValue("@specifiedUserId", specifiedUserId))  ; 
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            new Course(
+                            UtilityDAL.returnInt(reader, "courseId"),
+                            UtilityDAL.returnInt(reader, "userId"),
+                            UtilityDAL.returnString(reader,"courseName") ,
+                            UtilityDAL.returnString(reader,"courseDescription") ,
+                            UtilityDAL.returnBit(reader,"activeStatus") ,
+                            UtilityDAL.returnString(reader,"imageUrl") 
+
+                            );
+                        }
+                    }
+                }
+                
+            }
+            catch (SqlException e) { Console.WriteLine(e.Message); }
+            finally { conn.Close(); }
+            return list;
+        }
 
 
 
