@@ -54,7 +54,7 @@ namespace WEB_APPLICATION.Models
         
 
         // The method below takes an a user ID and returns all courses created by that User 
-        public List<Course> getCourseByInstructor(int specifiedUserId)
+        public List<Course> getCourseById(int specifiedUserId)
         {
             int courseId ; 
             int userId ; // this here refers to the ID of the instructor who created thsi 
@@ -69,19 +69,18 @@ namespace WEB_APPLICATION.Models
                 using ( SqlCommand cmd = new SqlCommand(
                     "SELECT * FROM Course  WHERE userId = @specifiedUserId", conn))
                 {
-                    cmd.Parameters.AddWithValue("@specifiedUserId", specifiedUserId))  ; 
+                    cmd.Parameters.AddWithValue("@specifiedUserId", specifiedUserId)  ; 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            new Course(
-                            UtilityDAL.returnInt(reader, "courseId"),
-                            UtilityDAL.returnInt(reader, "userId"),
-                            UtilityDAL.returnString(reader,"courseName") ,
-                            UtilityDAL.returnString(reader,"courseDescription") ,
-                            UtilityDAL.returnBit(reader,"activeStatus") ,
-                            UtilityDAL.returnString(reader,"imageUrl") 
-
+                                new Course(
+                                UtilityDAL.returnInt(reader, "courseId"),
+                                UtilityDAL.returnInt(reader, "userId"),
+                                UtilityDAL.returnString(reader, "courseName"),
+                                UtilityDAL.returnString(reader, "courseDescription"),
+                                UtilityDAL.returnString(reader, "imageUrl"),
+                                UtilityDAL.returnBit(reader, "activeStatus") 
                             );
                         }
                     }
@@ -90,7 +89,7 @@ namespace WEB_APPLICATION.Models
             }
             catch (SqlException e) { Console.WriteLine(e.Message); }
             finally { conn.Close(); }
-            return list;
+            return courseList;
         }
 
 
