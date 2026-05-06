@@ -9,7 +9,7 @@ namespace WEB_APPLICATION.Models
         public int userId { get; set; }
         public float completionRate { get; set; }
         public DateTime enrollmentDate { get; set; }
-        public bool? activeStatus { get; set; }
+        public bool activeStatus { get; set; }
 
         // constructor to create enrollment records 
         public EnrollmentRecord(int courseId, int userId)
