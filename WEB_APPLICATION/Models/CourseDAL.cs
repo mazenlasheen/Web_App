@@ -54,7 +54,7 @@ namespace WEB_APPLICATION.Models
         
 
         // The method below takes an a user ID and returns all courses created by that User 
-        public List<Course> getCourseById(int specifiedUserId)
+        public List<Course> getCoursesByUserId(int specifiedUserId)
         {
             int courseId ; 
             int userId ; // this here refers to the ID of the instructor who created thsi 
@@ -74,7 +74,7 @@ namespace WEB_APPLICATION.Models
                     {
                         while (reader.Read())
                         {
-                                new Course(
+                            Course c =  new Course(
                                 UtilityDAL.returnInt(reader, "courseId"),
                                 UtilityDAL.returnInt(reader, "userId"),
                                 UtilityDAL.returnString(reader, "courseName"),
@@ -82,6 +82,7 @@ namespace WEB_APPLICATION.Models
                                 UtilityDAL.returnString(reader, "imageUrl"),
                                 UtilityDAL.returnBit(reader, "activeStatus") 
                             );
+                            courseList.Add(c); 
                         }
                     }
                 }
