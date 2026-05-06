@@ -14,6 +14,13 @@ public class UtilityDAL
 
         return string_value  ;
     }
+    public static bool returnBit (SqlDataReader reader , string columnName)
+        {
+            // extracting the index 
+            int index = reader.GetOrdinal(columnName ) ; 
+            bool bit = reader.IsDBNull(index) ? false  : reader.GetBoolean(index) ;  
+            return bit ; 
+        }
     public static int  returnInt  ( SqlDataReader reader , string columnName ) 
     {
         // getting the index of the column 

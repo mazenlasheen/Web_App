@@ -4,21 +4,31 @@ namespace WEB_APPLICATION.Models
 {
     public class EnrollmentRecord
     {
-        public int EnrollmentID { get; set; }
-        public int CourseID { get; set; }
-        public int UserID { get; set; }
-        public float CompletionRate { get; set; }
-        public DateTime EnrollmentDate { get; set; }
-        public bool ActiveStatus { get; set; }
+        public int enrollmentId { get; set; }
+        public int courseId { get; set; }
+        public int userId { get; set; }
+        public float completionRate { get; set; }
+        public DateTime enrollmentDate { get; set; }
+        public bool? activeStatus { get; set; }
 
-        public EnrollmentRecord(int enrollmentID, int courseID, int userID)
+        // constructor to create enrollment records 
+        public EnrollmentRecord(int courseId, int userId)
         {
-            EnrollmentID = enrollmentID;
-            CourseID = courseID;
-            UserID = userID;
-            CompletionRate = 0;
-            EnrollmentDate = DateTime.UtcNow;
-            ActiveStatus = true;
+            this.courseId = courseId;
+            this.userId = userId;
+            this.completionRate = 0;
+            this.enrollmentDate = DateTime.UtcNow;
+            this.activeStatus = true;
         }
+    // Constructor for reading an existing enrollment from the database
+    public EnrollmentRecord(int enrollmentId, int courseId, int userId, float completionRate, DateTime enrollmentDate, bool activeStatus)
+    {
+        this.enrollmentId = enrollmentId;
+        this.courseId = courseId;
+        this.userId = userId;
+        this.completionRate = completionRate;
+        this.enrollmentDate = enrollmentDate;
+        this.activeStatus = activeStatus;
+    }
     }
 }

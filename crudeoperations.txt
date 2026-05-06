@@ -1,0 +1,119 @@
+This is a template  for crude operations SQL connections 
+
+═══════════════════════════════════════════════════════
+                  SQL DAL TEMPLATES
+═══════════════════════════════════════════════════════
+
+───────────────────────────────────────────────────────
+1. INSERT
+───────────────────────────────────────────────────────
+bool success = false;
+try
+{
+    conn.Open();
+    SqlCommand cmd = new SqlCommand(
+        "INSERT INTO TableName (col1, col2) VALUES (@val1, @val2)", conn);
+    cmd.Parameters.AddWithValue("@val1", value1);
+    cmd.Parameters.AddWithValue("@val2", value2);
+    if (cmd.ExecuteNonQuery() > 0)
+        success = true;
+}
+catch (SqlException e) { Console.WriteLine(e.Message); }
+finally { conn.Close(); }
+return success;
+
+───────────────────────────────────────────────────────
+2. UPDATE / DELETE
+───────────────────────────────────────────────────────
+bool success = false;
+try
+{
+    conn.Open();
+    SqlCommand cmd = new SqlCommand(
+        "UPDATE TableName SET col1 = @val1 WHERE id = @id", conn);
+    cmd.Parameters.AddWithValue("@val1", value1);
+    cmd.Parameters.AddWithValue("@id", id);
+    if (cmd.ExecuteNonQuery() > 0)
+        success = true;
+}
+catch (SqlException e) { Console.WriteLine(e.Message); }
+finally { conn.Close(); }
+return success;
+
+───────────────────────────────────────────────────────
+3. SELECT — SINGLE OBJECT
+───────────────────────────────────────────────────────
+ModelClass result = null;
+try
+{
+    conn.Open();
+    SqlCommand cmd = new SqlCommand(
+        "SELECT * FROM TableName WHERE id = @id", conn);
+    cmd.Parameters.AddWithValue("@id", id);
+    using (SqlDataReader reader = cmd.ExecuteReader())
+    {
+        if (reader.Read())
+        {
+            result = new ModelClass(
+                UtilityDAL.returnInt(reader, "id"),
+                UtilityDAL.returnString(reader, "col1")
+            );
+        }
+    }
+}
+catch (SqlException e) { Console.WriteLine(e.Message); }
+finally { conn.Close(); }
+return result;
+
+───────────────────────────────────────────────────────
+4. SELECT — LIST
+───────────────────────────────────────────────────────
+List<ModelClass> list = new List<ModelClass>();
+try
+{
+    conn.Open();
+    SqlCommand cmd = new SqlCommand(
+        "SELECT * FROM TableName WHERE col = @val", conn);
+    cmd.Parameters.AddWithValue("@val", value);
+    using (SqlDataReader reader = cmd.ExecuteReader())
+    {
+        while (reader.Read())
+        {
+            list.Add(new ModelClass(
+                UtilityDAL.returnInt(reader, "id"),
+                UtilityDAL.returnString(reader, "col1")
+            ));
+        }
+    }
+}
+catch (SqlException e) { Console.WriteLine(e.Message); }
+finally { conn.Close(); }
+return list;
+
+───────────────────────────────────────────────────────
+5. SELECT — SCALAR (single value e.g. COUNT, AVG)
+───────────────────────────────────────────────────────
+int result = 0; // change type as needed
+try
+{
+    conn.Open();
+    SqlCommand cmd = new SqlCommand(
+        "SELECT COUNT(*) FROM TableName WHERE col = @val", conn);
+    cmd.Parameters.AddWithValue("@val", value);
+    object scalar = cmd.ExecuteScalar();
+    if (scalar != null)
+        result = Convert.ToInt32(scalar);
+}
+catch (SqlException e) { Console.WriteLine(e.Message); }
+finally { conn.Close(); }
+return result;
+
+═══════════════════════════════════════════════════════
+QUICK REFERENCE
+───────────────────────────────────────────────────────
+INSERT            → ExecuteNonQuery()  → return bool
+UPDATE/DELETE     → ExecuteNonQuery()  → return bool
+SELECT one        → ExecuteReader()    → if(reader.Read())
+SELECT many       → ExecuteReader()    → while(reader.Read())
+SELECT value      → ExecuteScalar()    → Convert.ToInt32/ToFloat
+═══════════════════════════════════════════════════════

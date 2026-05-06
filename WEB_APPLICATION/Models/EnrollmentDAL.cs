@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+
 using System.Linq;
 using System.Web;
 using System.Web.Management;
@@ -12,6 +13,31 @@ namespace WEB_APPLICATION.Models
         private SqlConnection conn = UtilityDAL.createConnection() ; 
 
         // the method below takes a userId and a courseID and sets his enrollment status to false - soft delete - record still exists 
+
+        public bool enroll(int userId , int courseId ) // takes the user ID and the course they want to enroll two and creates a record 
+        {
+            bool success = false;
+            EnrollmentRecord enrollment  = new EnrollmentRecord(courseId , userId ) ; 
+            try
+            {
+                conn.Open();
+
+                using ( SqlCommand cmd = new SqlCommand(
+                    "INSERT INTO Enrollment (userId , courseId , completionRate, enrollmentDate,activeStatus ) VALUES ( @userId , @courseId , @completionRate, @enrollmentDate, @activeStatus )", conn)) {
+                    cmd.Parameters.AddWithValue("@userId", enrollment.userId);
+                    cmd.Parameters.AddWithValue("@courseId", enrollment.courseId);
+                    cmd.Parameters.AddWithValue("@completionRate", enrollment.completionRate);
+                    cmd.Parameters.AddWithValue("@enrollmentDate", enrollment.enrollmentDate);
+                    cmd.Parameters.AddWithValue("@activeStatus", enrollment.activeStatus);
+                if (cmd.ExecuteNonQuery() > 0)
+                    success = true;
+                }
+            }
+            catch (SqlException e) { Console.WriteLine(e.Message); }
+            finally { conn.Close(); }
+            return success;
+
+        }
         public bool unEnroll(int userId , int courseId  ) // takes a user ID and removes them from the course they are enrolled too 
         {
             bool success = false ; 
@@ -74,14 +100,98 @@ namespace WEB_APPLICATION.Models
             return success ; 
         }
 
+        public List<EnrollmentRecord> getEnrollmentByCousre (int takenCourseId )
+        {
+            List<EnrollmentRecord> listOfRecords = new List<EnrollmentRecord>() ; 
+            int enrollmentId ;  
+            int userId  ;
+            int courseId ;
+            int completionRate ; 
+            DateTime enrollmentDate ;   
+            bool activeStatus ;    
+            try
+            {
+                conn.Open();
+                using ( SqlCommand cmd = new SqlCommand("SELECT * FROM Enrollment WHERE courseId = @courseId AND  activeStatus = 1", conn)) 
+                {
+                    cmd.Parameters.AddWithValue("@courseId", takenCourseId);
+                    using (SqlDataReader reader = cmd.ExecuteReader() )
+                    {
+                        // keep iterating while there is rows to iterate through 
+                         while (reader.Read())
+                        {
+                            enrollmentId = UtilityDAL.returnInt(reader,"enrollmentId") ; 
+                            userId = UtilityDAL.returnInt(reader,"userId") ; 
+                            courseId = UtilityDAL.returnInt(reader,"courseId") ;  
+                            completionRate =  UtilityDAL.returnInt(reader,"completionRate") ;  
+                            enrollmentDate =  UtilityDAL.returnDateTime(reader,"enrollmentDate") ; 
+                            activeStatus = (bool)UtilityDAL.returnBit(reader,"activeStatus") ; 
+                            EnrollmentRecord record = new  EnrollmentRecord(enrollmentId , userId , courseId , completionRate , enrollmentDate ,activeStatus) ;
+                            listOfRecords.Add(record)  ; 
+                        }   
+                    }
+                
+
+
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return listOfRecords ; 
+            
+        
+        }
     
-    
-    
-    
-    
-    
-    
-    
+        // the below method returns all enrollment records of a specific user - it only retrives the active enrollments only 
+        public List<EnrollmentRecord> getEnrollmentByUser(int desiredUserId)
+        {
+            List<EnrollmentRecord> studentEnrollments = new List<EnrollmentRecord> () ; 
+            int enrollmentId ;  
+            int userId  ;
+            int courseId ;
+            int completionRate ; 
+            DateTime enrollmentDate ;   
+            bool activeStatus ;  
+            try
+            {
+                conn.Open();
+                using ( SqlCommand cmd = new SqlCommand("SELECT * FROM Enrollment WHERE userId = @userId AND activeStatus = 1", conn ) ) 
+                {
+                    cmd.Parameters.AddWithValue("@userId", desiredUserId);
+                    using (SqlDataReader reader = cmd.ExecuteReader() )
+                    {
+                        while(reader.Read()) // while there is a next row and it was moved towards 
+                        {
+                            enrollmentId = UtilityDAL.returnInt(reader,"enrollmentId") ; 
+                            userId = UtilityDAL.returnInt(reader,"userId") ; 
+                            courseId = UtilityDAL.returnInt(reader,"courseId") ;  
+                            completionRate =  UtilityDAL.returnInt(reader,"completionRate") ;  
+                            enrollmentDate =  UtilityDAL.returnDateTime(reader,"enrollmentDate") ; 
+                            activeStatus = (bool)UtilityDAL.returnBit(reader,"activeStatus") ; 
+                            EnrollmentRecord record = new  EnrollmentRecord(enrollmentId , userId , courseId , completionRate , enrollmentDate ,activeStatus) ;
+                            studentEnrollments.Add(record) ; 
+                        }
+                    }
+            
+                }
+            }
+            catch (SqlException e)
+            {
+            Console.WriteLine(e.Message);
+            }
+            finally
+            {
+            conn.Close();
+            }
+            return studentEnrollments ; 
+        }
+
     
     
     }
